@@ -1,5 +1,7 @@
 package com.example.demo.student;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Arrays;
@@ -8,6 +10,8 @@ import java.util.List;
 @RestController
 @RequestMapping("management/api/v1/students")
 public class StudentManagementController {
+
+    Logger log = LoggerFactory.getLogger(this.getClass());
 
     private static final List<Student> STUDENTS = Arrays.asList(
             new Student(1, "James Bond"),
@@ -22,16 +26,19 @@ public class StudentManagementController {
 
     @PostMapping
     public void registerNewStudent(@RequestBody Student student) {
-        System.out.println(student);
+        log.info(String.format("registerNewStudent : %s", student));
+//        System.out.println(student);
     }
 
     @DeleteMapping(path = "{studentId}")
     public void deleteStudent(@PathVariable("studentId") Integer studentId) {
-        System.out.println(studentId);
+        log.info(String.format("deleteStudent : %s", studentId));
+//        System.out.println(studentId);
     }
 
     @PutMapping(path = "{studentId}")
     public void updateStudent(@PathVariable("studentId") Integer studentId, @RequestBody Student student) {
-        System.out.println(String.format("%s %s", studentId, student));
+        log.info(String.format("updateStudent : studentId=%s %s", studentId, student));
+//        System.out.println(String.format("%s %s", studentId, student));
     }
 }
