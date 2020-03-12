@@ -2,6 +2,7 @@ package com.example.demo.student;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Arrays;
@@ -11,7 +12,7 @@ import java.util.List;
 @RequestMapping("management/api/v1/students")
 public class StudentManagementController {
 
-    Logger log = LoggerFactory.getLogger(this.getClass());
+    private Logger log = LoggerFactory.getLogger(this.getClass());
 
     private static final List<Student> STUDENTS = Arrays.asList(
             new Student(1, "James Bond"),
@@ -20,23 +21,27 @@ public class StudentManagementController {
     );
 
     @GetMapping
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN, ROLE_ADMINTRAINEE')")
     public List<Student> getAllStudents() {
         return STUDENTS;
     }
 
     @PostMapping
+    @PreAuthorize("hasAnyAuthority('student:wtire')")
     public void registerNewStudent(@RequestBody Student student) {
         log.info(String.format("registerNewStudent : %s", student));
 //        System.out.println(student);
     }
 
     @DeleteMapping(path = "{studentId}")
+    @PreAuthorize("hasAnyAuthority('student:wtire')")
     public void deleteStudent(@PathVariable("studentId") Integer studentId) {
         log.info(String.format("deleteStudent : %s", studentId));
 //        System.out.println(studentId);
     }
 
     @PutMapping(path = "{studentId}")
+    @PreAuthorize("hasAnyAuthority('student:wtire')")
     public void updateStudent(@PathVariable("studentId") Integer studentId, @RequestBody Student student) {
         log.info(String.format("updateStudent : studentId=%s %s", studentId, student));
 //        System.out.println(String.format("%s %s", studentId, student));
